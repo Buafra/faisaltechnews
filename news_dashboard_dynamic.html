@@ -32,7 +32,7 @@ h1{text-align:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:4px
 .date-badge{position:absolute;top:14px;left:14px;font-size:10px;color:#666;font-weight:700;direction:ltr;background:rgba(0,0,0,0.3);padding:3px 8px;border-radius:6px;}
 .carousel-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;overflow-y:auto;}
 .carousel-modal.show{display:flex;}
-.carousel-container{background:#0a0a0a;border-radius:20px;max-width:1200px;width:100%;overflow:hidden;}
+.carousel-container{background:#0a0a0a;border-radius:20px;max-width:100%;width:100%;overflow:hidden;}
 .carousel-header{background:linear-gradient(135deg,#8B5CF6,#EC4899);padding:20px;display:flex;justify-content:space-between;align-items:center;}
 .carousel-header h2{color:#fff;font-size:24px;}
 .close-btn{background:#fff;color:#000;border:none;width:40px;height:40px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:bold;transition:all .3s;}
@@ -40,17 +40,17 @@ h1{text-align:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:4px
 .carousel-wrapper{
     background:#000;
     padding:20px;
-    height:85vh;
+    min-height:600px;
     overflow:auto;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:flex-start;
+    justify-content:center;
 }
-}.slide{width:1080px;height:1350px;background:#000000;border-radius:32px;display:none;flex-direction:column;overflow:hidden;position:relative;margin:0 auto;}
+.slide{width:1080px;height:1350px;background:#000000;border-radius:32px;display:none;flex-direction:column;overflow:hidden;position:relative;margin:0 auto;}
 .slide.active{display:flex;}
 .carousel-wrapper .slide.active{
-    transform:scale(0.45);
+    transform:scale(0.70);
     transform-origin:top center;
 }
 .progress{display:flex;gap:8px;padding:40px 60px 0;}
@@ -111,7 +111,6 @@ let totalSlides = 6;
 // تحميل الأخبار من ملف JSON
 async function loadNews() {
   try {
-    // جرّب تحميل من مسار مختلف
     const paths = [
       'news_data.json',
       '../news_data.json',
@@ -133,7 +132,6 @@ async function loadNews() {
     
     newsData = await response.json();
     
-    // تحديث آخر وقت تحديث
     const now = new Date();
     document.getElementById('lastUpdate').textContent = now.toLocaleString('ar-SA');
     
@@ -373,7 +371,7 @@ function createCarouselSlides(news) {
   
   slides.forEach((slide, index) => {
     const slideDiv = document.createElement('div');
- slideDiv.className = 'slide' + (index === 0 ? ' active' : '');
+    slideDiv.className = 'slide' + (index === 0 ? ' active' : '');
     slideDiv.id = 'slide-' + (index + 1);
     slideDiv.innerHTML = slide.content;
     wrapper.appendChild(slideDiv);
@@ -399,36 +397,52 @@ function closeCarousel() {
 
 function downloadCurrent() {
   var el = document.getElementById('slide-' + currentSlide);
-
-  el.style.transform = 'none';
+  
+  // إزالة التحجيم قبل التحميل
+  var parent = el.parentElement;
+  parent.style.transform = 'none';
+  parent.style.transformOrigin = 'center';
 
   htmlToImage.toPng(el, {
-    width:1080,
-    height:1350,
-    pixelRatio:2
+    width: 1080,
+    height: 1350,
+    pixelRatio: 3,
+    quality: 1
   }).then(function(url){
-    el.style.transform = 'scale(0.28)';
-
+    // استعادة التحجيم
+    parent.style.transform = 'scale(0.70)';
+    
     var a = document.createElement('a');
     a.download = 'carousel_slide_' + currentSlide + '.png';
     a.href = url;
     a.click();
+  }).catch(err => {
+    console.error('Download error:', err);
+    parent.style.transform = 'scale(0.70)';
   });
 }
 
 async function downloadAll() {
+  var wrapper = document.getElementById('carouselWrapper');
+  
   for(var i=1; i<=totalSlides; i++){
     var el = document.getElementById('slide-' + i);
     await new Promise(r=>setTimeout(r,300));
-el.style.transform = 'none';
+    
+    // إزالة التحجيم
+    wrapper.style.transform = 'none';
 
-var url = await htmlToImage.toPng(el, {
-    width:1080,
-    height:1350,
-    pixelRatio:2
-});
+    var url = await htmlToImage.toPng(el, {
+      width: 1080,
+      height: 1350,
+      pixelRatio: 3,
+      quality: 1
+    });
 
-el.style.transform = 'scale(0.45)';    var a = document.createElement('a');
+    // استعادة التحجيم
+    wrapper.style.transform = 'none';
+    
+    var a = document.createElement('a');
     a.download = 'carousel_slide_' + i + '.png';
     a.href = url;
     a.click();
