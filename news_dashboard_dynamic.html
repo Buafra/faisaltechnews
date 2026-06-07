@@ -6,16 +6,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-    .carousel-wrapper{
-    background:#000;
-    padding:10px;
-    height:500px;
-    overflow:auto;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:flex-start;
-}
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#0a0a0a;font-family:'Cairo',Tahoma,Arial,sans-serif;min-height:100vh;padding:20px 16px 120px;}
@@ -47,11 +37,19 @@ h1{text-align:center;font-size:24px;font-weight:900;color:#fff;margin-bottom:4px
 .carousel-header h2{color:#fff;font-size:24px;}
 .close-btn{background:#fff;color:#000;border:none;width:40px;height:40px;border-radius:50%;font-size:24px;cursor:pointer;font-weight:bold;transition:all .3s;}
 .close-btn:hover{transform:scale(1.1);background:#EC4899;color:#fff;}
-.carousel-wrapper{background:#000;padding:40px;min-height:500px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.slide{width:1080px;height:1350px;background:#000000;border-radius:32px;display:none;flex-direction:column;overflow:hidden;position:relative;margin:0 auto;}
+.carousel-wrapper{
+    background:#000;
+    padding:10px;
+    height:500px;
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+}.slide{width:1080px;height:1350px;background:#000000;border-radius:32px;display:none;flex-direction:column;overflow:hidden;position:relative;margin:0 auto;}
 .slide.active{display:flex;}
 .slide-preview{
-    transform:scale(0.25);
+    transform:scale(0.15);
     transform-origin:top center;
 }
 .progress{display:flex;gap:8px;padding:40px 60px 0;}
